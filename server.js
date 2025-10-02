@@ -58,8 +58,9 @@ app.post('/api/login', async (req, res) => {
     }
 
     const usuario = result.recordset[0];
+    const usuarioActivo = Boolean(Number(usuario.activo));
 
-    if (usuario.activo !== 1) {
+    if (!usuarioActivo) {
       return res.status(403).json({ mensaje: 'El usuario está inactivo. Contacta al administrador.' });
     }
 
