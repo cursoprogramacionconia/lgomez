@@ -74,10 +74,12 @@
     <main>
         <h1>Iniciar sesión</h1>
         <p>
-            Ajusta el valor del atributo <code>data-api-base</code> del formulario para dirigir las peticiones a
-            otra instancia del API.
+            Ajusta el atributo <code>data-api-base</code> del formulario para dirigir las peticiones a otra instancia
+            del API. Puedes indicar la URL completa (<code>https://api.ejemplo.com</code>), un host con puerto
+            (<code>LGOMEZ:3000</code>) o incluso una ruta relativa (<code>/proxy/api</code>); el script normalizará el
+            valor y añadirá la ruta indicada en <code>data-api-path</code>.
         </p>
-        <form id="login-form" data-api-path="/api/login" data-api-base="" data-api-base-fallback="http://LGOMEZ:3000">
+        <form id="login-form" data-api-path="/api/login" data-api-base="" data-api-base-fallback="LGOMEZ:3000">
             <label>
                 Usuario
                 <input type="text" name="username" autocomplete="username" required>
