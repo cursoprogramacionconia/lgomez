@@ -35,16 +35,12 @@
             font-weight: 600;
         }
 
-        p {
-            margin: 0;
-        }
-
         .card {
             background: white;
             border-radius: 16px;
             box-shadow: 0 10px 40px rgba(15, 23, 42, 0.1);
             padding: 32px;
-            width: min(720px, 100%);
+            width: min(960px, 100%);
         }
 
         #login-screen {
@@ -62,7 +58,7 @@
             color: #475569;
         }
 
-        input {
+        input, textarea, select {
             width: 100%;
             padding: 10px 12px;
             border-radius: 10px;
@@ -71,7 +67,7 @@
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
-        input:focus {
+        input:focus, textarea:focus, select:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
@@ -104,6 +100,11 @@
             color: var(--secondary);
         }
 
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
         .login-header {
             text-align: center;
             margin-bottom: 24px;
@@ -123,50 +124,107 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
             gap: 16px;
             margin-bottom: 24px;
-            flex-wrap: wrap;
         }
 
-        .menu-grid {
-            display: grid;
-            gap: 16px;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        }
-
-        .menu-card {
-            background: #eff6ff;
-            border: 1px solid #bfdbfe;
-            border-radius: 14px;
-            padding: 24px;
-            text-align: left;
-            color: var(--secondary);
+        nav.main-nav {
             display: flex;
-            flex-direction: column;
-            gap: 8px;
+            gap: 12px;
+            margin-bottom: 24px;
         }
 
-        .menu-card:hover {
-            background: #dbeafe;
+        nav.main-nav button {
+            background: white;
+            border: 1px solid var(--border);
+            color: var(--secondary);
+            padding: 12px 24px;
+            font-weight: 500;
         }
 
-        .menu-card h2 {
-            font-size: 20px;
+        nav.main-nav button.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
         }
 
-        .menu-card p {
-            color: #475569;
+        .subnav {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .subnav button {
+            background: #e2e8f0;
+            color: var(--secondary);
+        }
+
+        .subnav button.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .grid-two-columns {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .crud-card {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .crud-card h3 {
+            margin-bottom: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
             font-size: 14px;
         }
 
-        @media (max-width: 600px) {
+        th {
+            background: #e2e8f0;
+            font-weight: 600;
+        }
+
+        td.actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        @media (max-width: 768px) {
             header.dashboard-header {
                 flex-direction: column;
                 align-items: flex-start;
             }
 
-            .menu-card {
-                padding: 20px;
+            nav.main-nav {
+                width: 100%;
+                flex-direction: column;
+            }
+
+            nav.main-nav button {
+                width: 100%;
             }
         }
     </style>
@@ -200,17 +258,171 @@
             <button id="logout-btn" class="btn-secondary">Cerrar sesión</button>
         </header>
 
-        <p style="margin-bottom: 24px; color: #475569;">Selecciona un módulo para trabajar en una nueva pestaña.</p>
-        <div class="menu-grid">
-            <button id="open-consultas" type="button" class="menu-card">
-                <h2>Consultas</h2>
-                <p>Crear y administrar consultas e historiales clínicos.</p>
-            </button>
-            <button id="open-administracion" type="button" class="menu-card">
-                <h2>Administración</h2>
-                <p>Gestionar usuarios del sistema y médicos registrados.</p>
-            </button>
-        </div>
+        <nav class="main-nav">
+            <button type="button" data-section="consultas" class="active">Consultas</button>
+            <button type="button" data-section="administracion">Administración</button>
+        </nav>
+
+        <main>
+            <section id="consultas" class="section active">
+                <div class="subnav">
+                    <button type="button" data-subsection="consultas-crud" class="active">Consultas</button>
+                    <button type="button" data-subsection="historial-crud">Historial</button>
+                </div>
+                <div class="grid-two-columns">
+                    <div id="consultas-crud" class="crud-card subsection active">
+                        <h3>Gestión de Consultas</h3>
+                        <form data-crud-form="consultas">
+                            <div class="form-group">
+                                <label for="consulta-paciente">Paciente</label>
+                                <input type="text" id="consulta-paciente" name="paciente" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="consulta-medico">Médico</label>
+                                <input type="text" id="consulta-medico" name="medico" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="consulta-fecha">Fecha</label>
+                                <input type="date" id="consulta-fecha" name="fecha" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="consulta-motivo">Motivo</label>
+                                <textarea id="consulta-motivo" name="motivo" rows="3" required></textarea>
+                            </div>
+                            <button type="submit" class="btn-primary">Guardar Consulta</button>
+                            <button type="button" class="btn-secondary" data-crud-reset="consultas">Cancelar</button>
+                        </form>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Paciente</th>
+                                    <th>Médico</th>
+                                    <th>Fecha</th>
+                                    <th>Motivo</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody data-crud-table="consultas"></tbody>
+                        </table>
+                    </div>
+
+                    <div id="historial-crud" class="crud-card subsection hidden">
+                        <h3>Historial Clínico</h3>
+                        <form data-crud-form="historial">
+                            <div class="form-group">
+                                <label for="historial-paciente">Paciente</label>
+                                <input type="text" id="historial-paciente" name="paciente" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="historial-diagnostico">Diagnóstico</label>
+                                <textarea id="historial-diagnostico" name="diagnostico" rows="3" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="historial-tratamiento">Tratamiento</label>
+                                <textarea id="historial-tratamiento" name="tratamiento" rows="3" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="historial-fecha">Fecha de Registro</label>
+                                <input type="date" id="historial-fecha" name="fecha" required>
+                            </div>
+                            <button type="submit" class="btn-primary">Guardar Historial</button>
+                            <button type="button" class="btn-secondary" data-crud-reset="historial">Cancelar</button>
+                        </form>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Paciente</th>
+                                    <th>Diagnóstico</th>
+                                    <th>Tratamiento</th>
+                                    <th>Fecha</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody data-crud-table="historial"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="administracion" class="section">
+                <div class="subnav">
+                    <button type="button" data-subsection="usuarios-crud" class="active">Usuarios</button>
+                    <button type="button" data-subsection="medicos-crud">Médicos</button>
+                </div>
+                <div class="grid-two-columns">
+                    <div id="usuarios-crud" class="crud-card subsection active">
+                        <h3>Administración de Usuarios</h3>
+                        <form data-crud-form="usuarios">
+                            <div class="form-group">
+                                <label for="usuario-nombre">Nombre</label>
+                                <input type="text" id="usuario-nombre" name="nombre" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="usuario-usuario">Usuario</label>
+                                <input type="text" id="usuario-usuario" name="usuario" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="usuario-rol">Rol</label>
+                                <select id="usuario-rol" name="rol" required>
+                                    <option value="">Selecciona un rol</option>
+                                    <option value="Administrador">Administrador</option>
+                                    <option value="Recepcionista">Recepcionista</option>
+                                    <option value="Medico">Médico</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn-primary">Guardar Usuario</button>
+                            <button type="button" class="btn-secondary" data-crud-reset="usuarios">Cancelar</button>
+                        </form>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nombre</th>
+                                    <th>Usuario</th>
+                                    <th>Rol</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody data-crud-table="usuarios"></tbody>
+                        </table>
+                    </div>
+
+                    <div id="medicos-crud" class="crud-card subsection hidden">
+                        <h3>Administración de Médicos</h3>
+                        <form data-crud-form="medicos">
+                            <div class="form-group">
+                                <label for="medico-nombre">Nombre</label>
+                                <input type="text" id="medico-nombre" name="nombre" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="medico-especialidad">Especialidad</label>
+                                <input type="text" id="medico-especialidad" name="especialidad" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="medico-telefono">Teléfono</label>
+                                <input type="tel" id="medico-telefono" name="telefono" required>
+                            </div>
+                            <button type="submit" class="btn-primary">Guardar Médico</button>
+                            <button type="button" class="btn-secondary" data-crud-reset="medicos">Cancelar</button>
+                        </form>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nombre</th>
+                                    <th>Especialidad</th>
+                                    <th>Teléfono</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody data-crud-table="medicos"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
 
     <script>
@@ -220,10 +432,20 @@
         const usernameDisplay = document.getElementById("username-display");
         const loginError = document.getElementById("login-error");
         const logoutBtn = document.getElementById("logout-btn");
-        const openConsultasBtn = document.getElementById("open-consultas");
-        const openAdministracionBtn = document.getElementById("open-administracion");
 
-        let currentUser = "";
+        const state = {
+            consultas: [],
+            historial: [],
+            usuarios: [],
+            medicos: []
+        };
+
+        const fieldOrder = {
+            consultas: ["paciente", "medico", "fecha", "motivo"],
+            historial: ["paciente", "diagnostico", "tratamiento", "fecha"],
+            usuarios: ["nombre", "usuario", "rol"],
+            medicos: ["nombre", "especialidad", "telefono"]
+        };
 
         loginForm.addEventListener("submit", (event) => {
             event.preventDefault();
@@ -232,8 +454,7 @@
             const password = formData.get("password").trim();
 
             if (username && password.length >= 4) {
-                currentUser = username;
-                usernameDisplay.textContent = currentUser;
+                usernameDisplay.textContent = username;
                 loginScreen.classList.add("hidden");
                 dashboard.classList.remove("hidden");
                 loginForm.reset();
@@ -245,23 +466,154 @@
         });
 
         logoutBtn.addEventListener("click", () => {
-            currentUser = "";
             dashboard.classList.add("hidden");
             loginScreen.classList.remove("hidden");
         });
 
-        function openModule(page) {
-            if (!currentUser) {
-                loginError.textContent = "Por favor inicia sesión nuevamente.";
-                loginError.classList.remove("hidden");
-                return;
-            }
-            const url = `${page}.html?username=${encodeURIComponent(currentUser)}`;
-            window.open(url, "_blank", "noopener");
+        document.querySelectorAll("nav.main-nav button").forEach((button) => {
+            button.addEventListener("click", () => {
+                const target = button.dataset.section;
+                document.querySelectorAll("nav.main-nav button").forEach((btn) => btn.classList.remove("active"));
+                button.classList.add("active");
+
+                document.querySelectorAll(".section").forEach((section) => section.classList.remove("active"));
+                document.getElementById(target).classList.add("active");
+            });
+        });
+
+        document.querySelectorAll(".section").forEach((section) => {
+            const buttons = section.querySelectorAll(".subnav button");
+            buttons.forEach((button) => {
+                button.addEventListener("click", () => {
+                    const target = button.dataset.subsection;
+                    buttons.forEach((btn) => btn.classList.remove("active"));
+                    button.classList.add("active");
+
+                    section.querySelectorAll(".subsection").forEach((subsection) => subsection.classList.add("hidden"));
+                    section.querySelectorAll(".subsection").forEach((subsection) => subsection.classList.remove("active"));
+
+                    const targetSection = section.querySelector(`#${target}`);
+                    targetSection.classList.remove("hidden");
+                    targetSection.classList.add("active");
+                });
+            });
+        });
+
+        function renderTable(type) {
+            const tbody = document.querySelector(`[data-crud-table="${type}"]`);
+            tbody.innerHTML = "";
+            state[type].forEach((item, index) => {
+                const row = document.createElement("tr");
+
+                const indexCell = document.createElement("td");
+                indexCell.textContent = index + 1;
+                row.appendChild(indexCell);
+
+                fieldOrder[type].forEach((field) => {
+                    const cell = document.createElement("td");
+                    cell.textContent = item[field] || "";
+                    row.appendChild(cell);
+                });
+
+                const actionsCell = document.createElement("td");
+                actionsCell.classList.add("actions");
+
+                const editButton = document.createElement("button");
+                editButton.type = "button";
+                editButton.textContent = "Editar";
+                editButton.className = "btn-secondary";
+                editButton.addEventListener("click", () => startEdit(type, index));
+
+                const deleteButton = document.createElement("button");
+                deleteButton.type = "button";
+                deleteButton.textContent = "Eliminar";
+                deleteButton.className = "btn-danger";
+                deleteButton.addEventListener("click", () => deleteEntry(type, index));
+
+                actionsCell.append(editButton, deleteButton);
+                row.appendChild(actionsCell);
+
+                tbody.appendChild(row);
+            });
         }
 
-        openConsultasBtn.addEventListener("click", () => openModule("consultas"));
-        openAdministracionBtn.addEventListener("click", () => openModule("administracion"));
+        function startEdit(type, index) {
+            const form = document.querySelector(`[data-crud-form="${type}"]`);
+            const data = state[type][index];
+            if (!form || !data) return;
+
+            Object.entries(data).forEach(([key, value]) => {
+                const field = form.querySelector(`[name="${key}"]`);
+                if (field) {
+                    field.value = value;
+                }
+            });
+
+            form.dataset.editing = "true";
+            form.dataset.editIndex = String(index);
+            const submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.textContent = "Actualizar";
+            }
+        }
+
+        function deleteEntry(type, index) {
+            state[type].splice(index, 1);
+            renderTable(type);
+        }
+
+        function resetForm(form, type) {
+            form.reset();
+            delete form.dataset.editing;
+            delete form.dataset.editIndex;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                const labels = {
+                    consultas: "Guardar Consulta",
+                    historial: "Guardar Historial",
+                    usuarios: "Guardar Usuario",
+                    medicos: "Guardar Médico"
+                };
+                submitBtn.textContent = labels[type] || "Guardar";
+            }
+        }
+
+        function handleCrudSubmit(event) {
+            event.preventDefault();
+            const form = event.currentTarget;
+            const type = form.dataset.crudForm;
+            const formData = new FormData(form);
+            const record = {};
+            formData.forEach((value, key) => {
+                record[key] = value.trim();
+            });
+
+            const isEditing = form.dataset.editing === "true";
+            const editIndex = Number(form.dataset.editIndex);
+
+            if (isEditing && !Number.isNaN(editIndex)) {
+                state[type][editIndex] = { ...state[type][editIndex], ...record };
+            } else {
+                state[type].push(record);
+            }
+
+            renderTable(type);
+            resetForm(form, type);
+        }
+
+        document.querySelectorAll("[data-crud-form]").forEach((form) => {
+            form.addEventListener("submit", handleCrudSubmit);
+        });
+
+        document.querySelectorAll("[data-crud-reset]").forEach((button) => {
+            button.addEventListener("click", () => {
+                const type = button.dataset.crudReset;
+                const form = document.querySelector(`[data-crud-form="${type}"]`);
+                if (form) {
+                    resetForm(form, type);
+                }
+            });
+        });
     </script>
 </body>
 </html>
