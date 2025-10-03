@@ -3,10 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Formulario de inicio de sesión</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        main {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.1);
+            width: min(420px, 90vw);
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        form {
+            display: grid;
+            gap: 1rem;
+        }
+
+        label {
+            display: grid;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        input {
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+        }
+
+        button {
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 8px;
+            background: #0d6efd;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+
+        pre {
+            background: #f1f3f5;
+            padding: 1rem;
+            border-radius: 8px;
+            min-height: 4rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+    </style>
 </head>
 <body>
-    <h1>Hola Mundo</h1>
-    <p>Este es un archivo HTML de ejemplo.</p>
-    <p>Segundo parrafo</p>
+    <main>
+        <h1>Iniciar sesión</h1>
+        <p>
+            Ajusta el atributo <code>data-api-base</code> del formulario para dirigir las peticiones a otra instancia
+            del API. Puedes indicar la URL completa (<code>https://api.ejemplo.com</code>), un host con puerto
+            (<code>LGOMEZ:3000</code>) o incluso una ruta relativa (<code>/proxy/api</code>); el script normalizará el
+            valor y añadirá la ruta indicada en <code>data-api-path</code>.
+        </p>
+        <form id="login-form" data-api-path="/api/login" data-api-base="" data-api-base-fallback="LGOMEZ:3000">
+            <label>
+                Usuario
+                <input type="text" name="username" autocomplete="username" required>
+            </label>
+            <label>
+                Contraseña
+                <input type="password" name="password" autocomplete="current-password" required>
+            </label>
+            <button type="submit">Entrar</button>
+        </form>
+        <pre data-login-status aria-live="polite"></pre>
+    </main>
+    <script src="./app.js"></script>
+</body>
 </html>
